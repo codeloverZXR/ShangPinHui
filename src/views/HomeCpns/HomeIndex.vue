@@ -2,6 +2,9 @@
   <div>
     我是首页组件
   </div>
+  <div>
+    git test
+   </div>
 </template>
 
 <script lang='ts'>
