@@ -4,7 +4,10 @@
   </div>
   <div>
     git test
-   </div>
+  </div>
+  <div>
+    vscode test
+  </div>
 </template>
 
 <script lang='ts'>
