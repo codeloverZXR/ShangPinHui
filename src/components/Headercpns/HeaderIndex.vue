@@ -58,8 +58,27 @@ export default defineComponent({
       //方法一：字符串形式
       // router.push('/search/' + keyword.value + "?k=" + keyword.value.toUpperCase())
       //方法二：模板字符串
-      router.push(`/search/${keyword.value}?k=${keyword.value.toLocaleUpperCase()}`)
+      // router.push(`/search/${keyword.value}?k=${keyword.value.toLocaleUpperCase()}`)
       //方法三：对象(常用,需要给要跳转的路由起别名)
+      router.push({ name: 'search', params: { keyword: keyword.value }, query: { k: keyword.value.toUpperCase() } })
+
+      /* 路由传参相关面试题 */
+
+      // 1.路由传递参数(对象写法)path是否可以结合params参数一起使用
+      // 答:路由跳转传参的时候，对象的写法可以是name，path两种形式，但是需要注意的是，path这种写法不能与params参数一起使用
+      // router.push({ path: '/search', params: { keyword: keyword.value }, query: { k: keyword.value.toUpperCase() } })
+
+      // 2.如何指定params参数可传可不传？
+      // 如果路由要去传递params参数(配置路由的时候已经有了相关参数占位),但是你没有传递params参数，则跳转的url会有问题
+      // 如果指定params参数，既可以传递，或者不传递，则在配置路由时，在相关params参数占位后面加上一个?即可
+      // router.push({ name: 'search', query: { k: keyword.value.toUpperCase() } })
+
+      // 3.如果已经指定了params参数可以传递或者不传递，但是如果传递的是空串，如何解决？
+      //解决 在参数传递的时候加入||undefined 解决
+      // router.push({ name: 'search', params: { keyword: '' || undefined }, query: { k: keyword.value.toUpperCase() } })
+
+      //4.当发生路由跳转时，能不能通过路由向目标组件传递props参数？
+      //可以，如果要传递需要在相关配置路由的对象里进行设置，一共有三种形式
       // router.push({ name: 'search', params: { keyword: keyword.value }, query: { k: keyword.value.toUpperCase() } })
     }
     return {

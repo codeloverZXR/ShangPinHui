@@ -1,0 +1,20 @@
+index.js
+ {
+    path: '/search/:keyword?',
+    name: 'search',
+    component: SearchIndex,
+    meta: { isShowFoot: true },
+
+    /* 有关路由传递参数的配置 */
+    //方法一：布尔值的写法 只能用于传递params参数
+    // props:true
+    //方法二：对象写法 可以额外给目标组件传递传递一些porps，该方法不能直接传递params参数
+    // props:{
+    //   a:'ha',
+    //   b:'hei'
+    // }
+    //方法三：函数(常用)，即可以直接传递params参数，又可以直接传递query参数，还可以进行额外的参数添加
+    // props: ($route) => {
+    //   return { keyword: $route.params.keyword, k: $route.query.k, a: 'test' }
+    // }
+  }
