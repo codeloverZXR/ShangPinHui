@@ -48,6 +48,7 @@ export default defineComponent({
     const moveToRegister = () => {
       router.push('/register')
     }
+
     //跳转到搜索页面
     //定义输入框数据变量
     const keyword = ref('')
@@ -61,7 +62,6 @@ export default defineComponent({
       // router.push(`/search/${keyword.value}?k=${keyword.value.toLocaleUpperCase()}`)
       //方法三：对象(常用,需要给要跳转的路由起别名)
       router.push({ name: 'search', params: { keyword: keyword.value }, query: { k: keyword.value.toUpperCase() } })
-
       /* 路由传参相关面试题 */
 
       // 1.路由传递参数(对象写法)path是否可以结合params参数一起使用
