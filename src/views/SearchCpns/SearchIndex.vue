@@ -1,14 +1,15 @@
 <template>
-<!-- 笔记测试 -->
-  <div class="note">
+ <!-- 笔记测试  -->
+  <!-- <div class="note">
     params:{{ $route.params.keyword }}
     <br>
     query:{{ $route.query.k }}
     <br>
-    <!-- 通过路由接收的参数(布尔){{ keyword }} -->
-    <!-- 通过路由接收的参数(对象){{a}},{{b}} -->
-    <!-- 通过路由接收的参数(函数){{ keyword }},{{ k }},{{ a }} -->
-  </div>
+     通过路由接收的参数(布尔){{ keyword }} 
+     通过路由接收的参数(对象){{a}},{{b}} 
+     通过路由接收的参数(函数){{ keyword }},{{ k }},{{ a }} 
+  </div> -->
+  <typeNavIndex/>
 </template>
 
 <script lang='ts'>

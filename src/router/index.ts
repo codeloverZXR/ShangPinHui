@@ -13,16 +13,19 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/home',
+    name: 'home',
     component: HomeIndex,
     meta: { isShowFoot: true }
   },
   {
     path: '/login',
+    name: 'login',
     component: LoginIndex,
     meta: { isShowFoot: false }
   },
   {
     path: '/register',
+    name: 'register',
     component: RegisterIndex,
     meta: { isShowFoot: false }
   },

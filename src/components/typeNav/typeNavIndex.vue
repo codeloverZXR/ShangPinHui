@@ -1,7 +1,7 @@
 <template>
   <div class="type-nav">
     <div class="container" @mouseleave="resetActiveIndex">
-      <h2 class="all">全部商品分类</h2>
+      <h2 class="all" @mouseenter="openAllGoodsList">全部商品分类</h2>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -12,57 +12,66 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort" @click="moveToSearch">
-        <div class="all-sort-list2">
-          <div
-            class="item"
-            v-for="(c1, index) in categoryList"
-            :key="c1.categoryId"
-            @mouseenter="chamgeActiveIndex(index)"
-            :class="{ isActive: activeIndex === index }"
-          >
-            <h3>
-              <a
-                href="javascript:;"
-                :data-category-name="c1.categoryName"
-                :data-category1id="c1.categoryId"
-                >{{ c1.categoryName }}</a
-              >
-            </h3>
+      <!-- 添加vue内置动画组件 -->
+      <transition name="sortall">
+        <div
+          class="sort"
+          @click="moveToSearch"
+          ref="allGoods"
+          @mouseleave="closeAllGoodsList"
+          v-show="isShow"
+        >
+          <div class="all-sort-list2">
             <div
-              class="item-list clearfix"
-              :style="{ display: activeIndex == index ? 'block' : 'none' }"
+              class="item"
+              v-for="(c1, index) in categoryList"
+              :key="c1.categoryId"
+              @mouseenter="chamgeActiveIndex(index)"
+              :class="{ isActive: activeIndex === index }"
             >
-              <div class="subitem">
-                <dl
-                  class="fore"
-                  v-for="c2 in c1.categoryChild"
-                  :key="c2.categoryId"
+              <h3>
+                <a
+                  href="javascript:;"
+                  :data-category-name="c1.categoryName"
+                  :data-category1id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
                 >
-                  <dt>
-                    <a
-                      href="javascript:;"
-                      :data-category-name="c2.categoryName"
-                      :data-category2id="c2.categoryId"
-                      >{{ c2.categoryName }}</a
-                    >
-                  </dt>
-                  <dd>
-                    <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+              </h3>
+              <div
+                class="item-list clearfix"
+                :style="{ display: activeIndex == index ? 'block' : 'none' }"
+              >
+                <div class="subitem">
+                  <dl
+                    class="fore"
+                    v-for="c2 in c1.categoryChild"
+                    :key="c2.categoryId"
+                  >
+                    <dt>
                       <a
                         href="javascript:;"
-                        :data-category-name="c3.categoryName"
-                        :data-category3id="c3.categoryId"
-                        >{{ c3.categoryName }}</a
+                        :data-category-name="c2.categoryName"
+                        :data-category2id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
                       >
-                    </em>
-                  </dd>
-                </dl>
+                    </dt>
+                    <dd>
+                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                        <a
+                          href="javascript:;"
+                          :data-category-name="c3.categoryName"
+                          :data-category3id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -79,9 +88,6 @@ export default defineComponent({
     const store = useStore();
     let categoryList = computed(() => {
       return store.state.home.categoryList;
-    });
-    onMounted(() => {
-      store.dispatch("getCategoryList");
     });
     //定义动态显示鼠标移入背景索引
     let activeIndex = ref(-1);
@@ -112,7 +118,6 @@ export default defineComponent({
       //获取到所点击的那个元素
       const element = event.target;
       //获取到自定义的属性和值
-      console.log(element.dataset.categoryName);
       let { categoryName, category1id, category2id, category3id } =
         element.dataset;
       if (categoryName) {
@@ -129,8 +134,53 @@ export default defineComponent({
         }
         //将query添加到location对象中
         location["query"] = query;
+        //如果当前的路由中有params参数，则跳转的search组件中时，location也要携带
+        if (router.currentRoute.value.params) {
+          location["params"] = router.currentRoute.value.params;
+        }
         //根据配置好的location进行跳转
         router.push(location);
+      }
+    };
+    //非home页中鼠标移入类列表展示业务
+    //方法一：动态添加类：缺点：无法添加过渡动画
+    //获取目标元素,只能在onMounted组件挂载完成的回调中获取，其它位置获取是undefined
+    /*     
+    const allGoods = ref();
+    onMounted(() => {
+      //如果不是/home路由
+      if (router.currentRoute.value.name != "home") {
+        allGoods.value.classList.add("moving");
+      }
+    });
+    //鼠标移入全部商品
+    const openAllGoodsList = () => {
+      if (router.currentRoute.value.name != "home") {
+        allGoods.value.classList.remove("moving");
+      }
+    };
+    //鼠标移出全部商品
+    const closeAllGoodsList = () => {
+      if (router.currentRoute.value.name != "home") {
+        allGoods.value.classList.add("moving");
+      }
+    }; 
+    */
+    //方法二:利用vue中的v-show
+    //注：在vue中，内置过渡动画的设置必须要有v-if或v-show的修饰或组件本身是动态组件才能正常使用
+    //定义一个变量来决定全部商品列表是否显示
+    const isShow = ref(true);
+    if (router.currentRoute.value.name != "home") {
+      isShow.value = false;
+    }
+    const openAllGoodsList = () => {
+      if (router.currentRoute.value.name != "home") {
+        isShow.value = true;
+      }
+    };
+    const closeAllGoodsList = () => {
+      if (router.currentRoute.value.name != "home") {
+        isShow.value = false;
       }
     };
     return {
@@ -139,6 +189,10 @@ export default defineComponent({
       chamgeActiveIndex,
       resetActiveIndex,
       moveToSearch,
+      // allGoods,
+      isShow,
+      openAllGoodsList,
+      closeAllGoodsList,
     };
   },
 });
@@ -174,20 +228,25 @@ export default defineComponent({
         color: #333;
       }
     }
-
+    // .moving {
+    //   display: none;
+    // }
     .sort {
       position: absolute;
       left: 0;
       top: 45px;
       width: 210px;
-      height: 461px;
+      height: 510px;
       position: absolute;
-      background: #fafafa;
+      background: #fcefe8;
       z-index: 999;
+      a {
+        text-decoration: none;
+      }
 
       .all-sort-list2 {
         .isActive {
-          background-color: #bfa;
+          background-color: #e3f9fd;
         }
         .item {
           h3 {
@@ -197,9 +256,11 @@ export default defineComponent({
             overflow: hidden;
             padding: 0 20px;
             margin: 0;
-
             a {
               color: #333;
+              &:hover {
+                color: #0081ff !important;
+              }
             }
           }
 
@@ -258,6 +319,19 @@ export default defineComponent({
           }
         }
       }
+    }
+    //定义vue动画的样式
+    //动画开始阶段
+    .sortall-enter-from {
+      height: 0px;
+    }
+    //动画结束阶段
+    .sortall-enter-to {
+      height: 510px;
+    }
+    //定义动画的执行时间,速率
+    .sortall-enter-active {
+      transition: all 0.7s linear;
     }
   }
 }
