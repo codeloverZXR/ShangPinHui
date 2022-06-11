@@ -2,11 +2,10 @@
   <div class="list-container">
     <div class="sortList clearfix">
       <div class="center">
-        <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="@/assets/homeImgs/listContainer/banner1.jpg" />
+            <div class="swiper-slide" v-for="item in bannerList" :key="item.id">
+              <img :src="item.imgUrl" />
             </div>
           </div>
           <!-- 如果需要分页器 -->
@@ -25,69 +24,59 @@
           </h4>
           <div class="clearix"></div>
           <ul class="news-list unstyled">
-            <li>
-              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[公告]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[公告]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-            </li>
+            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
           </ul>
         </div>
         <ul class="lifeservices">
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">话费</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">机票</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">电影票</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">游戏</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">彩票</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">加油站</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">酒店</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">火车票</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">众筹</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">理财</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">礼品卡</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">白条</span>
           </li>
@@ -101,14 +90,41 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import Swiper from "swiper";
+import { computed, defineComponent, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
 export default defineComponent({
-  name: 'listContainerIndex',
+  name: "listContainerIndex",
   setup() {
+    const store = useStore();
+    let bannerList = computed(() => {
+      return store.state.home.bannerList;
+    });
+    onMounted(() => {
+      setTimeout(() => {
+        const mySwiper = new Swiper(".swiper-container", {
+          // direction: "vertical", // 垂直切换选项
+          loop: true, // 循环模式选项
+          autoplay: true,
+
+          // 如果需要分页器
+          pagination: {
+            el: ".swiper-pagination",
+          },
+
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+        });
+      }, 2000);
+    });
     return {
-    }
+      bannerList,
+    };
   },
-})
+});
 </script>
 
 <style scoped lang="less">

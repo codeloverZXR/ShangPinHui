@@ -77,7 +77,7 @@
 </template>
 
 <script lang='ts'>
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 //lodash下的throttle节流函数，由于它是默认导出的，所以不需要使用{}
 import throttle from "lodash/throttle";
 import { useStore } from "vuex";

@@ -24,6 +24,8 @@ export default defineComponent({
     onMounted(() => {
       //获取商品分类数据
       store.dispatch("getCategoryList");
+      //获取首页轮播图数据
+      store.dispatch("getBannerList")
     });
     return {};
   },

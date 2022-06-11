@@ -3,7 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import typeNavIndex from '@/components/typeNav/typeNavIndex.vue'
-
+//引入swipercss样式
+import "swiper/css/swiper.css"
+//引入mockServe
+import "@/mock/mockServe.js"
 //vue3将typeNavIndex三级分页组件注册为全局组件
 //参数说明：第一个参数:全局组件的名称，第二个参数:具体的哪一个组件
 createApp(App).use(store).use(router).component(typeNavIndex.name, typeNavIndex).mount('#app')

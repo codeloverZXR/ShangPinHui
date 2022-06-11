@@ -1,0 +1,8 @@
+1.利用mockjs插件可以模拟一些服务器请求数据的操作，例如ListContainer和Floor组件中
+的数据服务器都没有提供，mock的数据不会向服务器端发送ajax请求，只会在前端本地进行模拟向服务器发起请求数据的操作
+2.使用步骤
+(1)安装mockjs插件(npm install --save mockjs)并在src项目目录下创建mock文件夹
+(2)准备 JSON  数据并在mock文件夹下创建相应的JSON文件，JSON文件注意格式化，不能保留空格
+(3)把mock文件夹下的JSON文件所需要的数据(图片等)放到public文件夹下(这样，项目在打包的时候，该文件夹下的数据资源会原封不动的在dist文件夹下)
+(4)在mock文件夹下创建mockSerer.js文件并进行相关代码配置来模拟服务器
+(5)将mockServe.js文件在项目入口文件中引入，使该文件至少被执行一次来模拟数据
