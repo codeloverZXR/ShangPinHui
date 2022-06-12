@@ -16,4 +16,11 @@ export const reqBannerList = () => {
     method: 'get'
   })
 }
+//homefloor数据
+export const reqFloorList = () => {
+  return requestByMock({
+    url: '/floor',
+    method: 'get'
+  })
+}
 

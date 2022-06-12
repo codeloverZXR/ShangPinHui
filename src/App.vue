@@ -26,7 +26,10 @@ export default defineComponent({
       store.dispatch("getCategoryList");
       //获取首页轮播图数据
       store.dispatch("getBannerList")
+      //获取首页floor数据
+      store.dispatch("getFloorList")
     });
+    
     return {};
   },
 });

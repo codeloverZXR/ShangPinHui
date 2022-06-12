@@ -2,19 +2,7 @@
   <div class="list-container">
     <div class="sortList clearfix">
       <div class="center">
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="item in bannerList" :key="item.id">
-              <img :src="item.imgUrl" />
-            </div>
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <carousel-index :list="bannerList" />
       </div>
       <div class="right">
         <div class="news">
@@ -90,38 +78,62 @@
 </template>
 
 <script lang='ts'>
-import Swiper from "swiper";
-import { computed, defineComponent, onMounted, reactive } from "vue";
-import { useStore } from "vuex";
+import { defineComponent } from "vue";
 export default defineComponent({
   name: "listContainerIndex",
-  setup() {
-    const store = useStore();
-    let bannerList = computed(() => {
-      return store.state.home.bannerList;
-    });
-    onMounted(() => {
-      setTimeout(() => {
-        const mySwiper = new Swiper(".swiper-container", {
-          // direction: "vertical", // 垂直切换选项
-          loop: true, // 循环模式选项
-          autoplay: true,
+  props: {
+    bannerList: {
+      default: Object,
+      require: true,
+    },
+  },
+  setup(props) {
+    console.log(props.bannerList,'zzz')//一开始是空值，必须要监听父组件传递的那个值的变化和DOM才能完成swiper
+    // const store = useStore();
+    // let bannerList = computed(() => {
+    //   return store.state.home.bannerList;
+    // });
+    //通过ref获取ref = bannerSwiper的节点
+    // let bannerSwiper = ref(null);
+    /* 
+    new Swiper 的实例必须在轮播图对应的swiperDOM更新完毕后才能有效
+    1.在Mounted组件挂载完毕时:不可行，因为这个时候虽然派发了vuex action事件，但服务器响应需要时间
+    vuex对应的state bannerList此时还没有值
+    2.利用watch监听bannerList的改变，一旦发生改变再定义swiper实例:还是不可行，
+    虽然bannerList已经有数据了，但for循环还未开始，DOM还没有更新
+    解决:watch + nextTick监听完bannerList改变后，再调用nextTick监听下一次DOM更新完成，再进行swiper实例的定义
+    因为这次监听完成的DOM就是轮播图对应的swiper更新完毕后的DOM
+    */
+    //监听轮播图列表是否发生改变,只要发生变化就执行操作
+    /*  watch(
+      ()=>bannerList,
+      () => {
+        //虽然bannerList已经有数据了，但for循环还未开始，DOM还没有更新
+        //nextTick将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。
+        nextTick(() => {
+          new Swiper(bannerSwiper.value, {
+            // direction: "vertical", // 垂直切换选项
+            loop: true, // 循环模式选项
+            autoplay: true,
 
-          // 如果需要分页器
-          pagination: {
-            el: ".swiper-pagination",
-          },
+            // 如果需要分页器
+            pagination: {
+              el: ".swiper-pagination",
+            },
 
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
         });
-      }, 2000);
-    });
+      },
+      { immediate: true, deep: true }
+    ); */
     return {
-      bannerList,
+      // bannerList,
+      // bannerSwiper,
     };
   },
 });
