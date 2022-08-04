@@ -45,7 +45,7 @@ export default defineComponent({
     let floorList = computed(() => {
       return store.state.home.floorList;
     });
-    console.log(bannerList, floorList);
+    // console.log(bannerList, floorList);
     return {
       bannerList,
       floorList,

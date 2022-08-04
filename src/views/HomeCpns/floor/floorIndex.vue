@@ -69,8 +69,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-    console.log(props.myFloorList, "xxx");//有值
+  setup() {
+    // console.log(props.myFloorList, "xxx");//有值
     //获取ref节点
     // const floorSwiper = ref(null);
     /* onMounted(() => {

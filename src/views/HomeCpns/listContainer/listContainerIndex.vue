@@ -87,8 +87,8 @@ export default defineComponent({
       require: true,
     },
   },
-  setup(props) {
-    console.log(props.bannerList,'zzz')//一开始是空值，必须要监听父组件传递的那个值的变化和DOM才能完成swiper
+  setup() {
+    // console.log(props.bannerList,'zzz')//一开始是空值，必须要监听父组件传递的那个值的变化和DOM才能完成swiper
     // const store = useStore();
     // let bannerList = computed(() => {
     //   return store.state.home.bannerList;

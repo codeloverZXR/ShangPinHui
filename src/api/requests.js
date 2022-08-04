@@ -1,4 +1,10 @@
 //引入axios
+/* 
+总结：请求后台数据
+1.第一次封装axios实例：创建axios实例，并配置基本信息baseurl和timeout
+2.第二次封装request请求：利用创建好的axios实例，配置具体接口地址，请求方式，传递参数
+3.第三次封装function：创建获取数据的具体方法 
+*/
 import axios from "axios";
 /* 
 需求：

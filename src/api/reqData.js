@@ -23,4 +23,12 @@ export const reqFloorList = () => {
     method: 'get'
   })
 }
+//search数据
+export const reqSearchData = (params) => {
+  return requests({
+    url: '/list',
+    method: 'post',
+    data: params
+  })
+}
 

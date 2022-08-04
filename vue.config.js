@@ -1,8 +1,10 @@
-const { defineConfig } = require('@vue/cli-service')
+const {defineConfig} = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
+
   //关闭eslint校验工具
   lintOnSave: false,
+
   //配置代理跨域
   devServer: {
     proxy: {
@@ -10,6 +12,12 @@ module.exports = defineConfig({
       '/api': {
         target: 'http://gmall-h5-api.atguigu.cn'
       }
+    }
+  },
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'scss',
+      patterns: []
     }
   }
 })

@@ -12,8 +12,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-    console.log(props.test,'test');
+  setup() {
+    // console.log(props.test,'test');空
     return {};
   },
 });

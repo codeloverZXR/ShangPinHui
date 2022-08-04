@@ -12,8 +12,12 @@
     "core-js": "^3.8.3",
     "less": "^4.1.2",
     "less-loader": "^11.0.0",
+    "mitt": "^3.0.0",
     "mockjs": "^1.1.0",
+    "node-sass": "^7.0.1",
     "nprogress": "^0.2.0",
+    "sass": "^1.54.0",
+    "sass-loader": "^13.0.2",
     "swiper": "^5.4.5",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
@@ -31,6 +35,8 @@
     "@vue/eslint-config-typescript": "^9.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "typescript": "~4.5.5"
+    "style-resources-loader": "^1.4.1",
+    "typescript": "~4.5.5",
+    "vue-cli-plugin-style-resources-loader": "~0.1.5"
   }
 }

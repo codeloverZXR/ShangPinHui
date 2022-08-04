@@ -1,6 +1,6 @@
 <template>
   <header-index-vue />
-  <router-view />
+  <router-view/>
   <foot-index-vue v-show="$route.meta.isShowFoot" />
 </template>
 
@@ -25,11 +25,11 @@ export default defineComponent({
       //获取商品分类数据
       store.dispatch("getCategoryList");
       //获取首页轮播图数据
-      store.dispatch("getBannerList")
+      store.dispatch("getBannerList");
       //获取首页floor数据
-      store.dispatch("getFloorList")
+      store.dispatch("getFloorList");
     });
-    
+
     return {};
   },
 });

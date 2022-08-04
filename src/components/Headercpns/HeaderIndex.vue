@@ -39,7 +39,9 @@
 
 <script lang='ts'>
 import router from "@/router";
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
+//引入事件总线
+import emitter from "@/utils/eventBus.js";
 export default defineComponent({
   name: "HeaderIndex",
 
@@ -53,7 +55,6 @@ export default defineComponent({
     const moveToRegister = () => {
       router.push("/register");
     };
-
     //跳转到搜索页面
     //定义输入框数据变量
     const keyword = ref("");
@@ -89,7 +90,13 @@ export default defineComponent({
         location["query"] = router.currentRoute.value.query;
       }
       router.push(location);
+      // keyword.value = "";
     };
+    onMounted(() => {
+      emitter.on("clearKeyword", () => {
+        keyword.value = "";
+      });
+    });
     return {
       moveToHome,
       moveToLogin,
