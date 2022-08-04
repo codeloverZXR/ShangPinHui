@@ -105,7 +105,8 @@
               </li>
             </ul>
           </div>
-          <pageFilter/>
+          <pageFilter :pageNo="pageNo" :pageSize="pageSize" :total="total" :continues="5" @changePage="changePage"
+                      @upPage="upPage" @downPage="downPage"/>
         </div>
       </div>
     </div>
@@ -258,6 +259,24 @@
         searchParams.order = order
         store.dispatch("getSearchData", searchParams)
       }
+      let pageNo = ref(1)
+      let total = ref(73 )
+      let pageSize = ref(10)
+      const changePage = function (item) {
+        pageNo.value = item
+      }
+      const upPage = function () {
+        pageNo.value = pageNo.value - 1
+        if (pageNo.value < 1) {
+          pageNo.value = 1
+        }
+      }
+      const downPage = function () {
+        pageNo.value  = pageNo.value + 1
+        if (pageNo.value > Math.ceil(total.value / pageSize.value)){
+          pageNo.value = Math.ceil(total.value / pageSize.value)
+        }
+      }
       return {
         searchData,
         goodsList,
@@ -268,7 +287,13 @@
         removeTrademark,
         choseNorms,
         removeProps,
-        changeOrder
+        changeOrder,
+        pageNo,
+        changePage,
+        upPage,
+        downPage,
+        total,
+        pageSize
       };
     },
   });
