@@ -69,7 +69,7 @@
               <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <a target="_blank" @click="openDtail(item.id)"
                     ><img :src="item.defaultImg"
                     /></a>
                   </div>
@@ -131,6 +131,9 @@
     },
     setup() {
       let store = useStore();
+      let pageNo = ref(1)
+      let pageSize = computed(() => store.state.search.searchData.pageSize)
+      let total = computed(() => store.state.search.searchData.total)
       const searchParams = reactive({
         category1Id: "",
         category2Id: "",
@@ -139,7 +142,7 @@
         keyword: "",
         order: "1:desc",
         pageNo: 1,
-        pageSize: 10,
+        pageSize: pageSize,
         props: [],
         trademark: "",
       });
@@ -156,6 +159,8 @@
             );
             //发送事件，更新仓库中的search数据
             store.dispatch("getSearchData", searchParams);
+            //更新数据
+            console.log(store.state.search.searchData)
             //置空searchParams参数中的categoryId数据
             searchParams.category1Id = "";
             searchParams.category2Id = "";
@@ -163,6 +168,15 @@
           },
           {deep: true, immediate: true}
       );
+      //监听页码变化
+      watch(
+          () => pageNo.value,
+          () => {
+            searchParams.pageNo = pageNo.value
+            store.dispatch("getSearchData", searchParams)
+          },
+          {deep: true}
+      )
       const searchData = computed(() => {
         return store.state.search.searchData;
       });
@@ -172,6 +186,8 @@
       });
       //删除商品面包屑
       const removeCategoryName = () => {
+        //重新获取数据时页码置为1
+        pageNo.value = 1
         //清空categoryName
         searchParams.categoryName = undefined;
         // console.log(Boolean(router.currentRoute.value.params));//true
@@ -186,6 +202,8 @@
       };
       //删除关键字面包屑
       const removeKeyword = () => {
+        //重新获取数据时页码置为1
+        pageNo.value = 1
         //清空keyword
         searchParams.keyword = undefined;
         //清空输入框内容
@@ -200,12 +218,16 @@
       };
       //点击品牌图片
       const moveToTrademark = (item) => {
+        //重新获取数据时页码置为1
+        pageNo.value = 1
         searchParams.trademark = `${item.tmId}:${item.tmName}`;
         //更新仓库数据
         store.dispatch("getSearchData", searchParams);
       };
       //清除品牌面包屑
       const removeTrademark = () => {
+        //重新获取数据时页码置为1
+        pageNo.value = 1
         //清空trademark关键字
         searchParams.trademark = undefined;
         /*
@@ -235,6 +257,8 @@
       };
       //选择商品规格参数
       const choseNorms = (props) => {
+        //重新获取数据时页码置为1
+        pageNo.value = 1
         if (searchParams.props.indexOf(props) === -1) {
           searchParams.props.push(props)
           store.dispatch("getSearchData", searchParams)
@@ -242,12 +266,16 @@
       }
       //删除商品规格面包屑
       const removeProps = (index) => {
+        //重新获取数据时页码置为1
+        pageNo.value = 1
         searchParams.props.splice(index, 1)
         store.dispatch("getSearchData", searchParams)
       }
       //选择商品排列规则
       let flag = ref(true)
       const changeOrder = (num) => {
+        //重新获取数据时页码置为1
+        pageNo.value = 1
         flag.value = !flag.value
         let type = ''
         if (flag.value) {
@@ -259,9 +287,7 @@
         searchParams.order = order
         store.dispatch("getSearchData", searchParams)
       }
-      let pageNo = ref(1)
-      let total = ref(73 )
-      let pageSize = ref(10)
+      //改变商品分页
       const changePage = function (item) {
         pageNo.value = item
       }
@@ -272,11 +298,17 @@
         }
       }
       const downPage = function () {
-        pageNo.value  = pageNo.value + 1
-        if (pageNo.value > Math.ceil(total.value / pageSize.value)){
+        pageNo.value = pageNo.value + 1
+        if (pageNo.value > Math.ceil(total.value / pageSize.value)) {
           pageNo.value = Math.ceil(total.value / pageSize.value)
         }
       }
+      //
+      //选择商品打开详情页
+      const openDtail = function (itemId) {
+        router.push({name: 'detail', params: {keyword: itemId}})
+      }
+
       return {
         searchData,
         goodsList,
@@ -293,7 +325,8 @@
         upPage,
         downPage,
         total,
-        pageSize
+        pageSize,
+        openDtail
       };
     },
   });

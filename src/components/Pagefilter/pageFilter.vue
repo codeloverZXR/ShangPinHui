@@ -115,7 +115,7 @@
 
 <style scoped lang="scss">
   .isactive{
-    background-color: #646fb0 !important;
+    background-color: #4cb9fc !important;
   }
   #pagefilter {
     margin: 10px auto;
@@ -137,11 +137,20 @@
         text-align: center;
 
         button {
-          background-color: #4cb9fc;
+          background-color: #eeeeee;
           border: none;
           border-radius: 5px;
           height: 100%;
           width: 100%;
+          cursor:pointer;
+          border: 1px solid #7a6e6e;
+          &:hover{
+            background-color: #4cb9fc;
+            transition: background-color .5s;
+          }
+          /*&:active{*/
+          /*  background-color: #bfa;*/
+          /*}*/
         }
       }
 
