@@ -31,4 +31,11 @@ export const reqSearchData = (params) => {
     data: params
   })
 }
+//商品详情数据
+export const reqGoodDetail = (skuId) => {
+  return requests({
+    url:`/item/${skuId}`,
+    method:'get',
+  })
+}
 

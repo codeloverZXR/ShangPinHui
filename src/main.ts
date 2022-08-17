@@ -2,6 +2,8 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+//清除默认样式
+import '@/static/css/reset.css'
 //将导航条设置为全局组件
 import typeNavIndex from '@/components/typeNav/typeNavIndex.vue'
 //将轮播图设置为全局组件
@@ -9,7 +11,7 @@ import carouselIndex from '@/components/Carousel/carouselIndex.vue'
 //将分页器注册为全局组件
 import pageFilter from "@/components/Pagefilter/pageFilter.vue";
 //引入swiper的css样式
-// import "swiper/css/swiper.css"
+import "swiper/css/swiper.css"
 //引入mockServe
 import "@/mock/mockServe.js"
 //vue3将typeNavIndex三级分页组件注册为全局组件

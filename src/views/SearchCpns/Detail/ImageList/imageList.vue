@@ -1,8 +1,8 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="swipercontainer">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img src="../images/s1.png">
+      <div class="swiper-slide" v-for="(item, index) in skuImageList" :key="item.id">
+        <img :src="item.imgUrl" :class="{active: index === activeIndex}" @click="updateImg(item.imgUrl,index)"/>
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -10,13 +10,49 @@
   </div>
 </template>
 
-<script lang='ts'>
+<script>
   import Swiper from 'swiper'
-  import {defineComponent} from 'vue'
+  import emitter from "@/utils/eventBus";
+  import {defineComponent, ref, nextTick, watch} from 'vue'
+
   export default defineComponent({
     name: 'imageList',
-    setup() {
-      return {}
+    props: {
+      skuImageList: {
+        type: Array,
+        default() {
+          return [{}]
+        }
+      }
+    },
+    setup(props) {
+      let activeIndex = ref(0)
+      const swipercontainer = ref(null)
+      watch(
+          () => props.skuImageList,
+          () => {
+            nextTick(() => {
+              new Swiper(swipercontainer.value, {
+                slidesPerView: 4,
+                // 如果需要前进后退按钮
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                },
+              })
+            })
+          },
+          {immediate: true, deep: true}
+      )
+      const updateImg = function (imgUrl, index) {
+        emitter.emit("updateImg", imgUrl)
+        activeIndex.value = index
+      }
+      return {
+        swipercontainer,
+        updateImg,
+        activeIndex
+      }
     },
   })
 </script>
@@ -31,6 +67,10 @@
     .swiper-slide {
       width: 56px;
       height: 56px;
+
+      & > :nth-child(1) {
+        margin-left: 20px;
+      }
 
       img {
         width: 100%;

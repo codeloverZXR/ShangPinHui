@@ -1,21 +1,71 @@
 <template>
-  <div class="spec-preview">
-    <img src="../images/s1.png"/>
+  <div class="spec-preview" @mousemove="changeMagnifier">
+    <img :src="showImgUrl"/>
     <div class="event"></div>
     <div class="big">
-      <img src="../images/s1.png"/>
+      <img :src="showImgUrl" ref="bigImg"/>
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref="magnifier"></div>
   </div>
 </template>
 
-<script lang='ts'>
-  import {defineComponent} from 'vue'
+<script>
+  import {defineComponent, onMounted, ref, reactive, computed, watch} from 'vue'
+  import emitter from "@/utils/eventBus";
 
   export default defineComponent({
     name: 'zoomIndex',
-    setup() {
-      return {}
+    props: {
+      skuImageList: {
+        type: Array,
+        default() {
+          return [{}]
+        }
+      }
+    },
+    setup(props) {
+      // let showImgUrl = computed(() => {
+      //   return props.skuImageList[0].imgUrl
+      // })
+      let showImgUrl = ref('')
+      watch(() => props.skuImageList, (newValue, oldValue) => {
+        showImgUrl.value = props.skuImageList[0].imgUrl
+      })
+
+      onMounted(() => {
+        emitter.on("updateImg", (imgUrl) => {
+          showImgUrl.value = imgUrl
+        })
+      })
+      //放大镜
+      const magnifier = ref(null)
+      const bigImg = ref(null)
+      const changeMagnifier = function (event) {
+        let left = event.offsetX - magnifier.value.offsetWidth / 2
+        let top = event.offsetY - magnifier.value.offsetHeight / 2
+        if (left <= 0) {
+          left = 0
+        }
+        if (left >= magnifier.value.offsetWidth) {
+          left = magnifier.value.offsetWidth
+        }
+        if (top <= 0) {
+          top = 0
+        }
+        if (top >= magnifier.value.offsetHeight) {
+          top = magnifier.value.offsetHeight
+        }
+        magnifier.value.style.left = left + 'px'
+        magnifier.value.style.top = top + 'px'
+        bigImg.value.style.left = -2 * left + 'px'
+        bigImg.value.style.top = -2 * top + 'px'
+      }
+      return {
+        showImgUrl,
+        magnifier,
+        bigImg,
+        changeMagnifier
+      }
     },
   })
 </script>

@@ -7,31 +7,30 @@
     <section class="con">
       <!-- 导航路径区域 -->
       <div class="conPoin">
-        <span>手机、数码、通讯</span>
-        <span>手机</span>
-        <span>Apple苹果</span>
-        <span>iphone 6S系类</span>
+        {{categoryView.category1Name}} /
+        {{categoryView.category2Name}} /
+        {{categoryView.category3Name}}
       </div>
       <!-- 主要内容区域 -->
       <div class="mainCon">
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <zoomIndex/>
+          <zoomIndex :skuImageList="skuInfo.skuImageList"/>
           <!-- 小图列表 -->
-          <imageList/>
+          <imageList :skuImageList="skuInfo.skuImageList"/>
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
           <div class="goodsDetail">
-            <h3 class="InfoName">Apple iPhone 6s（A1700）64G玫瑰金色 移动通信电信4G手机</h3>
-            <p class="news">推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返</p>
+            <h3 class="InfoName">{{skuInfo.skuName}}</h3>
+            <p class="news">{{skuInfo.skuDesc}}</p>
             <div class="priceArea">
               <div class="priceArea1">
                 <div class="title">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</div>
                 <div class="price">
                   <i>¥</i>
-                  <em>5299</em>
+                  <em>{{price}}</em>
                   <span>降价通知</span>
                 </div>
                 <div class="remark">
@@ -64,29 +63,13 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
-              </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0" class="active">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0" class="active">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0" class="active">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
+              <dl v-for="item in spuSaleAttrList" :key="item.id">
+                <dt class="title">{{item.saleAttrName}}</dt>
+                <dd changepirce="0" :class="{active:item1.isChecked === '1' ? true : false}"
+                    v-for="(item1,index) in item.spuSaleAttrValueList" :key="item1.id"
+                    @click="changActive(index, item.spuSaleAttrValueList)">
+                  {{item1.saleAttrValueName}}
+                </dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -349,7 +332,9 @@
 <script lang='ts'>
   import zoomIndex from "@/views/SearchCpns/Detail/Zoom/zoomIndex.vue";
   import imageList from "@/views/SearchCpns/Detail/ImageList/imageList.vue";
-  import {defineComponent} from 'vue'
+  import {defineComponent, onMounted, computed} from 'vue'
+  import {useStore} from "vuex";
+  import router from "@/router";
 
   export default defineComponent({
     components: {
@@ -358,7 +343,40 @@
     },
     name: 'detailIndex',
     setup() {
-      return {}
+      const store = useStore()
+      onMounted(() => {
+        store.dispatch('getGoodInfo', router.currentRoute.value.params.keyword)
+      })
+      const categoryView = computed(() => {
+        return store.getters.categoryView
+      })
+      const skuInfo = computed(() => {
+        return store.getters.skuInfo
+      })
+      const spuSaleAttrList = computed(() => {
+        return store.getters.spuSaleAttrList
+      })
+      const valuesSkuJson = computed(() => {
+        return store.getters.valuesSkuJson
+      })
+      const price = computed(() => {
+        return store.state.goodDetail.goodInfo.price
+      })
+      const changActive = function (index,attr) {
+        attr.forEach((item) => {
+          item.isChecked = '0'
+        })
+        attr[index].isChecked = '1'
+      }
+
+      return {
+        categoryView,
+        skuInfo,
+        spuSaleAttrList,
+        valuesSkuJson,
+        price,
+        changActive
+      }
     },
   })
 </script>

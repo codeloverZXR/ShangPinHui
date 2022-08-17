@@ -160,7 +160,6 @@
             //发送事件，更新仓库中的search数据
             store.dispatch("getSearchData", searchParams);
             //更新数据
-            console.log(store.state.search.searchData)
             //置空searchParams参数中的categoryId数据
             searchParams.category1Id = "";
             searchParams.category2Id = "";
